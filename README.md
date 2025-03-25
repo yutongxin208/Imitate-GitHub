@@ -4,6 +4,9 @@
 
 A beautiful and modern portfolio website that showcases your GitHub projects, contributions, and skills. This project provides a clean and professional interface to display your work and connect with others.
 
+## preface
+It is for personal learning and communication purposes only, and should not be used for commercial purposes
+
 ## Features
 
 - 🌓 Dark/Light theme support
