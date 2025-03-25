@@ -155,3 +155,7 @@ cd github-profile-portfolio
 ## 支持
 
 如果你遇到任何问题或有疑问，请在 GitHub 仓库中提出 issue。 
+
+## 警告
+
+仅供个人学习交流使用，请勿商用
