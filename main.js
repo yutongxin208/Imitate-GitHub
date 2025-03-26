@@ -1,16 +1,37 @@
 // 模拟项目数据，实际使用时可以替换为真实的API请求
 const projectsData = [
     {
-        name: "example-project-1",
-        description: "An example project description",
+        name: "WordPress-LivePhotos",
+        description: "在WordPress支持LivePhotos",
+        tags: ["JavaScript", "PHP", "CSS"],
+        stars: 1,
+        forks: 0
+    },
+    {
+        name: "Sasariki.github.io",
+        description: "个人网站",
         tags: ["JavaScript", "HTML", "CSS"],
+        stars: 1,
+        forks: 0
+    },
+    {
+        name: "x-html",
+        description: "An HTML page that mimics the macOS interface",
+        tags: ["HTML"],
+        stars: 1,
+        forks: 0
+    },
+    {
+        name: "Team-EtherArc-web",
+        description: "Team EtherArc web",
+        tags: ["HTML"],
         stars: 0,
         forks: 0
     },
     {
-        name: "example-project-2",
-        description: "Another example project description",
-        tags: ["JavaScript", "React", "Node.js"],
+        name: "go-proxy-bingai",
+        description: "用Vue3和Go搭建的微软New Bing演示站点，拥有一致的UI体验，支持ChatGPT提示词，支持API调用，国内可用。",
+        tags: ["HTML", "Vue", "Go"],
         stars: 0,
         forks: 0
     }
@@ -18,18 +39,18 @@ const projectsData = [
 
 // 在 projectsData 数组前添加正在进行的项目数据
 const ongoingProject = {
-    name: "example-project-1",
-    description: "This is an example ongoing project.",
-    tags: ["JavaScript", "HTML", "CSS"],
+    name: "WordPress-LivePhotos",
+    description: "在WordPress支持LivePhotos，这是一个正在开发中的重要项目。",
+    tags: ["JavaScript", "PHP", "CSS"],
     progress: 65, // 进度百分比
-    stars: 0,
+    stars: 1,
     forks: 0
 };
 
 // GitHub API配置
-const GITHUB_USERNAME = 'yourusername';
+const GITHUB_USERNAME = '换成你自己的';
 const GITHUB_API_BASE = 'https://api.github.com';
-const GITHUB_TOKEN = ''; // 用户需要自己添加自己的 GitHub token
+const GITHUB_TOKEN = '换成你自己的';
 
 // 获取GitHub仓库数据的函数
 async function fetchGitHubData() {
@@ -374,19 +395,47 @@ function renderActivityTimeline(data, activities = null) {
                 description: 'Created 1 repository',
                 date: 'Mar 23'
             }
+        ],
+        'February 2025': [
+            {
+                type: 'commit',
+                repo: 'Team-EtherArc-web',
+                count: 3,
+                description: 'Created 3 commits in 1 repository'
+            }
         ]
     };
 
     let timelineHtml = '';
-    Object.entries(sampleActivities).forEach(([month, activities], index) => {
+    const maxVisibleActivities = 3; // Maximum number of visible activities initially
+    let visibleActivitiesCount = 0;
+    let totalActivitiesCount = 0;
+    let currentMonthVisible = true;
+
+    Object.entries(sampleActivities).forEach(([month, activities], monthIndex) => {
+        // Check if we should hide this month
+        if (visibleActivitiesCount >= maxVisibleActivities) {
+            currentMonthVisible = false;
+        }
+        
         timelineHtml += `
-            <div class="activity-month ${index > 0 ? 'hidden-activity' : ''}">
+            <div class="activity-month ${currentMonthVisible ? '' : 'hidden-activity'}">
                 <div class="activity-month-header">
                     <h3>${month}</h3>
-                </div>
-                ${activities.map(activity => {
-                    if (activity.type === 'commit') {
-                        return `
+                </div>`;
+        
+        activities.forEach((activity, activityIndex) => {
+            totalActivitiesCount++;
+            
+            if (currentMonthVisible) {
+                visibleActivitiesCount++;
+                if (visibleActivitiesCount >= maxVisibleActivities) {
+                    currentMonthVisible = false;
+                }
+            }
+            
+            if (activity.type === 'commit') {
+                timelineHtml += `
                     <div class="activity-item">
                         <div class="activity-icon">
                             <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
@@ -404,10 +453,9 @@ function renderActivityTimeline(data, activities = null) {
                                 <div class="commit-bar" style="background-color: var(--color-calendar-graph-day-L4-bg);"></div>
                             </div>
                         </div>
-                    </div>
-                        `;
-                    } else if (activity.type === 'create') {
-                        return `
+                    </div>`;
+            } else if (activity.type === 'create') {
+                timelineHtml += `
                     <div class="activity-item">
                         <div class="activity-icon">
                             <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
@@ -429,12 +477,11 @@ function renderActivityTimeline(data, activities = null) {
                                 <span class="activity-date">${activity.date}</span>
                             </div>
                         </div>
-                    </div>
-                        `;
-                    }
-                }).join('')}
-            </div>
-        `;
+                    </div>`;
+            }
+        });
+        
+        timelineHtml += `</div>`;
     });
 
     if (Object.keys(sampleActivities).length === 0) {
@@ -442,26 +489,26 @@ function renderActivityTimeline(data, activities = null) {
             <div class="activity-month">
                 <div class="activity-month-header">
                     <h3>No activity</h3>
-                    </div>
-                    <div class="activity-item">
+                </div>
+                <div class="activity-item">
                     <div class="activity-content">
                         <div class="activity-header">
                             This user doesn't have any public activity yet.
                         </div>
                     </div>
                 </div>
-                            </div>
+            </div>
         `;
     }
 
-    if (Object.keys(sampleActivities).length > 1) {
+    if (totalActivitiesCount > maxVisibleActivities) {
         timelineHtml += `
             <div class="show-more">
                 <button class="show-more-button" onclick="toggleActivity(event)">
-                    Show more activity
-                                    <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                    Show more activity (${totalActivitiesCount - maxVisibleActivities} more)
+                    <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                         <path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z"></path>
-                                    </svg>
+                    </svg>
                 </button>
             </div>
         `;
@@ -610,13 +657,13 @@ function renderProjects() {
 // 修改微信二维码弹窗功能
 function showWechat(event) {
     event.preventDefault();
-    showQRCode('WeChat', 'path/to/your/qrcode.png', 'Scan to add WeChat');
+    showQRCode('微信', 'https://cdn.motsuni.cn/wechat.png', '扫码添加微信');
 }
 
 // 添加 QQ 二维码弹窗功能
 function showQQ(event) {
     event.preventDefault();
-    showQRCode('QQ', 'path/to/your/qrcode.png', 'Scan to add QQ');
+    showQRCode('QQ', 'https://cdn.motsuni.cn//5F0F254804122675E05D936AC8081975.png', '扫码添加QQ');
 }
 
 // 通用的二维码弹窗显示函数
@@ -1051,30 +1098,51 @@ function closeProjectModal() {
 // 添加切换活动显示的函数
 function toggleActivity(event) {
     event.preventDefault();
-    const hiddenActivities = document.querySelectorAll('.hidden-activity');
-    const button = event.currentTarget;
+    const hiddenActivities = document.querySelectorAll('.activity-month.hidden-activity');
+    const button = event.currentTarget || event.target;
     
-    if (hiddenActivities.length > 0) {
+    // Debug information - can be removed later
+    console.log('Hidden activities found:', hiddenActivities.length);
+    
+    // Check if any hidden activity is currently visible by looking for the "show" class
+    let allHidden = true;
+    hiddenActivities.forEach(activity => {
+        if (activity.classList.contains('show')) {
+            allHidden = false;
+        }
+    });
+    
+    console.log('All activities hidden:', allHidden);
+    
+    if (!allHidden) {
+        // At least one hidden activity is visible, so hide all of them
         hiddenActivities.forEach(activity => {
-            activity.classList.add('show');
+            activity.classList.remove('show');
         });
+        
+        // Find total count for the button text
+        const totalActivities = document.querySelectorAll('.activity-item').length;
+        const visibleActivities = document.querySelectorAll('.activity-month:not(.hidden-activity) .activity-item').length;
+        const hiddenCount = totalActivities - visibleActivities;
+        
+        // Update button text
         button.innerHTML = `
-            Show less activity
+            Show more activity (${hiddenCount} more)
             <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                 <path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z"></path>
             </svg>
         `;
     } else {
-        const allActivities = document.querySelectorAll('.activity-month');
-        allActivities.forEach((activity, index) => {
-            if (index > 0) {
-                activity.classList.remove('show');
-            }
+        // All activities are hidden, so show them
+        hiddenActivities.forEach(activity => {
+            activity.classList.add('show');
         });
+        
+        // Update button text
         button.innerHTML = `
-            Show more activity
+            Show less activity
             <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-                <path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z"></path>
+                <path d="M3.22 10.78a.749.749 0 0 1 0-1.06l4.25-4.25a.749.749 0 0 1 1.06 0l4.25 4.25a.749.749 0 1 1-1.06 1.06L8 6.939 4.28 10.719a.749.749 0 0 1-1.06 0Z"></path>
             </svg>
         `;
     }
