@@ -672,13 +672,13 @@ async function renderProjects() {
 // 修改微信二维码弹窗功能
 function showWechat(event) {
     event.preventDefault();
-    showQRCode('微信', 'https://cdn.motsuni.cn/wechat.png', '扫码添加微信');
+    showQRCode('微信', '#', '扫码添加微信');
 }
 
 // 添加 QQ 二维码弹窗功能
 function showQQ(event) {
     event.preventDefault();
-    showQRCode('QQ', 'https://cdn.motsuni.cn//5F0F254804122675E05D936AC8081975.png', '扫码添加QQ');
+    showQRCode('QQ', '#', '扫码添加QQ');
 }
 
 // 通用的二维码弹窗显示函数
