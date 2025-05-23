@@ -10,44 +10,38 @@ function normalizeLangName(name) {
         .replace(/\s+/g, '');
 }
 
+// GitHub API配置
+const GITHUB_USERNAME = 'YOUR_GITHUB_USERNAME'; // 替换为你的 GitHub 用户名
+const GITHUB_API_BASE = 'https://api.github.com';
+const GITHUB_TOKEN = ''; // 替换为你的 GitHub Token
+
+// 修改 projectsData 数组为示例数据
 const projectsData = [
     {
-        name: "Project-1",
-        description: "A sample project description",
+        name: "example-project-1",
+        description: "这是一个示例项目",
         tags: ["JavaScript", "HTML", "CSS"],
-        stars: 1,
+        stars: 0,
         forks: 0
     },
     {
-        name: "Project-2",
-        description: "Another sample project",
-        tags: ["JavaScript", "React", "Node.js"],
-        stars: 1,
-        forks: 0
-    },
-    {
-        name: "Project-3",
-        description: "A third sample project",
+        name: "example-project-2",
+        description: "另一个示例项目",
         tags: ["Python", "Django"],
-        stars: 1,
+        stars: 0,
         forks: 0
     }
 ];
 
-// 在 projectsData 数组前添加正在进行的项目数据
+// 修改正在进行的项目数据
 const ongoingProject = {
-    name: "Current-Project",
-    description: "This is a sample ongoing project description.",
-    tags: ["JavaScript", "React", "Node.js"],
-    progress: 65, // 进度百分比
-    stars: 1,
+    name: "example-project-1",
+    description: "这是一个正在开发中的示例项目",
+    tags: ["JavaScript", "HTML", "CSS"],
+    progress: 65,
+    stars: 0,
     forks: 0
 };
-
-// GitHub API配置
-const GITHUB_USERNAME = 'your-username';
-const GITHUB_API_BASE = 'https://api.github.com';
-const GITHUB_TOKEN = 'your-github-token'; // 请替换为你的GitHub token
 
 // 获取GitHub数据的函数
 async function fetchGitHubData() {
@@ -678,13 +672,13 @@ async function renderProjects() {
 // 修改微信二维码弹窗功能
 function showWechat(event) {
     event.preventDefault();
-    showQRCode('WeChat', 'path/to/wechat-qr.png', 'Scan to add WeChat');
+    showQRCode('微信', 'https://cdn.motsuni.cn/wechat.png', '扫码添加微信');
 }
 
 // 添加 QQ 二维码弹窗功能
 function showQQ(event) {
     event.preventDefault();
-    showQRCode('QQ', 'path/to/qq-qr.png', 'Scan to add QQ');
+    showQRCode('QQ', 'https://cdn.motsuni.cn//5F0F254804122675E05D936AC8081975.png', '扫码添加QQ');
 }
 
 // 通用的二维码弹窗显示函数
